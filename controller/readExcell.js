@@ -238,7 +238,12 @@ var read = function (uri, filename, callback) {
       Situation: data.__EMPTY,
       colorCode: colorCode,
       textColor: textColor,
-      output: "./Image/" + data.Name,
+      output:
+        "./Image/" +
+        data.Name.trim()
+          .replace(" ", "_")
+          .replace("//", "-")
+          .replace("\\", "-"),
     });
   }
   nodeHtmlToImage({
