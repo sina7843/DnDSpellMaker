@@ -29,9 +29,10 @@ const HTML = `<!DOCTYPE html>
       font-weight: normal;
       font-style: normal;
       font-variation-settings: "slnt" 0;
+      color : {{textColor}}
     }
     .container {
-      background-image: url("./img/evocation-FA.png"); /*school*/
+      background-image: url("{{BackImage}}"); /*school*/
       background-size: 100% 100%;
       width: 6cm;
       height: 9cm;
@@ -53,7 +54,7 @@ const HTML = `<!DOCTYPE html>
       width: 0.45cm;
     }
     .spellName {
-      background-image: url("./img/Vector\ 12.png");
+      background-image: url("{{NameImage}}");
       background-size: 100% 100%;
       width: 4.5cm;
       height: 1cm;
@@ -78,7 +79,7 @@ const HTML = `<!DOCTYPE html>
       align-items: center;
     }
     .box {
-      background-color: #e61a2e;
+      background-color: {{colorCode}};
       border: 2px solid #f5e57f;
     }
     .Level {
@@ -189,15 +190,42 @@ var read = function (uri, filename, callback) {
   var DataFa = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]]);
   let content = [];
   for (data of DataEn) {
+    let colorCode = "";
+    let textColor = "";
+    if (data.School == "Abjuration") {
+      colorCode = "#075DC2";
+      textColor = "white";
+    } else if (data.School == "Conjuration") {
+      colorCode = "#FFDB1E";
+      textColor = "black";
+    } else if (data.School == "Divination") {
+      colorCode = "#8EF1FF";
+      textColor = "black";
+    } else if (data.School == "Enchantment") {
+      colorCode = "#FF99F5";
+      textColor = "black";
+    } else if (data.School == "Evocation") {
+      colorCode = "#E61A2E";
+      textColor = "black";
+    } else if (data.School == "Illusion") {
+      colorCode = "#B28EFF";
+      textColor = "black";
+    } else if (data.School == "Necromancy") {
+      colorCode = "#8EFFA7";
+      textColor = "black";
+    } else {
+      colorCode = "#FE9B41";
+      textColor = "black";
+    }
     content.push({
       NameImage: `./School/${data.School}/name.png`,
       DetailImage: `./School/${data.School}/detail.png`,
       BackImage: `./School/${data.School}/back.png`,
       classImage: `./School/${data.School}/class.png`,
       spellImage: `./images/${data.Name.trim()
-        .replaceAll(" ", "_")
-        .replaceAll("//", "-")
-        .replaceAll("\\", "-")}.png`,
+        .replace(" ", "_")
+        .replace("//", "-")
+        .replace("\\", "-")}.png`,
       Name: data.Name,
       Level: data.Level > 0 ? "Spell Level " + data.Level : "Cantrip",
       School: data.School,
@@ -208,6 +236,8 @@ var read = function (uri, filename, callback) {
       Effect: data["Damage/Effect"],
       Details: data.Details,
       Situation: data.__EMPTY,
+      colorCode: colorCode,
+      textColor: textColor,
       output: "./Image/" + data.Name,
     });
   }
